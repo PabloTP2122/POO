@@ -17,3 +17,7 @@ class LibroNoDisponibleError(BibliotecaError):
     """El libro solicitado no está disponible para préstamo"""
 
     pass
+
+
+class UsuarioNoEncontradoError(BibliotecaError):
+    pass
