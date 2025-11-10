@@ -1,81 +1,66 @@
-class Libro:
-    """Clase para representar un libro de una biblioteca"""
+from libros import LibroFísico, LibroProtocol
+from biblioteca import Biblioteca
+from usuarios import SolicitanteLibro, Estudiante, Profesor, Familia
+from exceptions import BibliotecaError
 
-    # Constante de clase
-    UMBRAL_POPULARIDAD = 5
+familia = Familia()
+biblioteca = Biblioteca("Platzi biblioteca")
 
-    def __init__(
-        self,
-        titulo: str,
-        autor: str,
-        ISBN: str,
-        disponible: bool = True,  # Valor por defecto
-    ):
-        self.titulo = titulo
-        self.autor = autor
-        self.ISBN = ISBN
-        self.disponible = disponible
-        self.veces_prestado: int = 0
+mi_libro = LibroFísico("100 años de soledad", "Gabriel Garcia M", "1234567890", True)
+mi_libro_2 = LibroFísico("El fin de la eternidad", "Isaac Asimov", "1234567890", True)
+mi_libro_3 = LibroFísico("Yo, robot", "Isaac Asimov", "1234567890", True)
+mi_libro_4 = LibroFísico("El hombre bicentenario", "Isaac Asimov", "1234567890", True)
 
-    def __str__(self) -> str:
-        """Representación 'amigable' para el usuario final."""
-        return f"Libro {self.titulo} por {self.autor} disponible: {self.disponible}"
+mi_libro_no_disponible = LibroFísico(
+    "Fundación e imperio", "Isaac Asimov", "1234567890", False
+)
 
-    def __repr__(self):
-        """Representación 'oficial' e inequívoca para desarrolladores."""
-        return (
-            f"Libro(titulo='{self.titulo}', autor='{self.autor}', "
-            f"ISBN='{self.ISBN}', disponible={self.disponible}, "
-            f"veces_prestado={self.veces_prestado})"
-        )
-
-    def prestar(self):
-        """Presta el libro si está disponible."""
-        if self.disponible:
-            self.disponible = False
-
-        self.veces_prestado += 1
-        return True
-
-    def devolver(self):
-        """Devuelve el libro si estaba prestado."""
-        # No se puede devolver un libro que ya está disponible.
-        if self.disponible:
-            return False
-        self.disponible = True
-        return True
-
-    def es_popular(self):
-        """Indica si el libro ha superado el umbral de popularidad."""
-        return self.veces_prestado >= self.UMBRAL_POPULARIDAD
-
-
-mi_libro = Libro("100 años de soledad", "Gabriel Garcia M", "1234567890", True)
-mi_libro_2 = Libro("Fundación", "Isaac Asimov", "1234567890", True)
-
-
-libros: list[Libro] = [
+lista_libros: list[LibroProtocol] = [
     mi_libro,
-    Libro("El principito", "Saint-Exupéry", "1234567890", True),
-    Libro("Fundación", "Isaac Asimov", "1234567890", True),
+    mi_libro_2,
+    mi_libro_3,
+    mi_libro_4,
+    mi_libro_no_disponible,
 ]
 
-""" for i, libro in enumerate(libros):
-    libro.print_book_info(i=i + 1) """
 
-Libro.UMBRAL_POPULARIDAD = 5
-
-for _ in range(5):
-    print(mi_libro.prestar())
-    print(mi_libro.devolver())
-
-for _ in range(2):
-    print(mi_libro_2.prestar())
-    print(mi_libro_2.devolver())
+""" Implementaciones de usuarios """
 
 
-# [libro.print_book_info(i=i + 1) for i, libro in enumerate(libros)]
-# [print(libro) for libro in libros]
-print(f"Libro: {mi_libro.titulo} , es Popular: ", mi_libro.es_popular())
-print(f"Libro: {mi_libro_2.titulo} , es Popular: ", mi_libro_2.es_popular())
-print(repr(mi_libro))
+def prestar_libros(solicitante: SolicitanteLibro, titulo, autor, isbn):
+    solicitante.solicitar_libro(titulo, autor, isbn)
+    return f"Libro {titulo} prestado con éxito"
+
+
+estudiante = Estudiante("Pablo", "A1630637", "IMT")
+profesor = Profesor("PabloT", "L157820528", "Ciencias e ingeniería")
+profesor_2 = Profesor("Juanito", "L147820528", "Humanidades")
+profesor_3 = Profesor("Rocio", "L15741828", "Ciencias e ingeniería")
+
+usuarios_validos: list[SolicitanteLibro] = [
+    estudiante,
+    profesor,
+    profesor_2,
+    profesor_3,
+]
+try:
+    prestar = mi_libro_no_disponible.prestar()
+    print(prestar)
+except BibliotecaError as e:
+    print(f"Error: {e}, Tipo: {type(e)}")
+#    print("Error, libro no se puede prestar")
+# biblioteca.libros = lista_libros
+# print(biblioteca.libros_disponibles())
+try:
+    result = estudiante.solicitar_libro("El título del libro", "El autor", None)
+except BibliotecaError as e:
+    print(f"Error: {e}, Tipo: {type(e)}")
+    print("Error en la ejecución")
+result = estudiante.solicitar_libro("El título del libro", "El autor", "2434NFRFNS")
+print(result)
+
+
+""" [
+    print(prestar_libros(usuario, f"titulo_prueba_{i}", "autor_prueba", "isbn_prueba"))
+    for i, usuario in enumerate[SolicitanteLibro](usuarios_validos)
+] """
