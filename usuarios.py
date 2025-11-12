@@ -1,4 +1,3 @@
-from libros import Libro
 from typing import Protocol
 from exceptions import DatosLibroInvalidError
 
@@ -6,16 +5,16 @@ from exceptions import DatosLibroInvalidError
 class SolicitanteLibro(Protocol):
     """Método que debe implementar cualquier solicitante"""
 
-    def solicitar_libro(self, titulo: str, autor: str, isbn: str) -> str: ...
+    def solicitar_libro(self, titulo: str) -> str: ...
 
 
 class Usuario:
     def __init__(self, nombre: str, cedula: str):
         self.nombre = nombre
         self.cedula = cedula
-        self.libros_prestados: list[Libro] = []
+        self.libros_prestados: list[str] = []
 
-    def solicitar_libro(self, titulo, autor, isbn) -> str:
+    def solicitar_libro(self, titulo) -> str:
         return f"Solicitud del libro realizada {titulo}"
 
 
@@ -25,14 +24,12 @@ class Estudiante(Usuario):
         self.carrera = carrera
         self.limite_libros = 3
 
-    def solicitar_libro(self, titulo: str, autor: str, isbn: str) -> str:
-        if not titulo or not autor or not isbn:
-            raise DatosLibroInvalidError(
-                f"Ninguno de los datos del libro puede estar vacío: {titulo}, {autor}, {isbn}"
-            )
+    def solicitar_libro(self, titulo: str) -> str:
+        if not titulo:
+            raise DatosLibroInvalidError(f"El título no debe estar vacío: {titulo}")
         if len(self.libros_prestados) < self.limite_libros:
-            self.libros_prestados.append(Libro(titulo, autor, isbn))
-            return f"Libro con título {titulo} correctamente prestado"
+            self.libros_prestados.append(titulo)
+            return f"Libro con título: '{titulo}', correctamente prestado"
         return f"Límite de préstamos alcanzado, límite: {self.limite_libros}"
 
 

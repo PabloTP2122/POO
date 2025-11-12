@@ -5,39 +5,13 @@ from rich.prompt import Prompt
 from rich.text import Text
 
 from biblioteca import Biblioteca
-from exceptions import UsuarioNoEncontradoError
-from libros import LibroFísico, LibroProtocol
-from usuarios import Estudiante, Familia, Profesor, SolicitanteLibro
+from data import lista_estudiantes, lista_libros, usuarios_validos
+from exceptions import LibroNoDisponibleError, UsuarioNoEncontradoError
+from helper_functions import print_errors
 
-familia = Familia()
+
 biblioteca = Biblioteca("Platzi biblioteca")
-
-mi_libro = LibroFísico("100 años de soledad", "Gabriel Garcia M", "1234567890")
-mi_libro_2 = LibroFísico("El fin de la eternidad", "Isaac Asimov", "1234567890")
-mi_libro_3 = LibroFísico("Yo, robot", "Isaac Asimov", "1234567890")
-mi_libro_4 = LibroFísico("El hombre bicentenario", "Isaac Asimov", "1234567890")
-mi_libro_5 = LibroFísico("Fundación e imperio", "Isaac Asimov", "1234567890")
-estudiante = Estudiante("Pablo", "A1630637", "IMT")
-profesor = Profesor("PabloT", "L157820528", "Ciencias e ingeniería")
-profesor_2 = Profesor("Juanito", "L147820528", "Humanidades")
-profesor_3 = Profesor("Rocio", "L15741828", "Ciencias e ingeniería")
-
-usuarios_validos: list[SolicitanteLibro] = [
-    estudiante,
-    profesor,
-    profesor_2,
-    profesor_3,
-]
-
-lista_libros: list[LibroProtocol] = [
-    mi_libro,
-    mi_libro_2,
-    mi_libro_3,
-    mi_libro_4,
-    mi_libro_5,
-]
-
-biblioteca.usuarios = usuarios_validos
+biblioteca.usuarios = lista_estudiantes + usuarios_validos
 biblioteca.libros = lista_libros
 
 
@@ -45,7 +19,7 @@ console = Console()
 # 1. Construye el contenido como un objeto Text (o un simple string)
 contenido = Text()
 contenido.append("Bienvenido a la Biblioteca de Platzi\n", style="bold green")
-contenido.append("----------------------------\n", style="dim green")
+contenido.append("------------------------------------\n", style="dim green")
 contenido.append("Libros disponibles:\n", style="bold cyan")
 
 for libro in biblioteca.libros_disponibles():
@@ -65,11 +39,33 @@ console.print(
 cedula = Prompt.ask("[bold green]Digite el número de cédula[/bold green]")
 try:
     usuario = biblioteca.buscar_usuario(cedula)
-    print(Panel(f"Bienvenido: {usuario.nombre}", border_style="blue"))
+    print(Panel(f"¡Bienvenido {usuario.nombre}!", border_style="blue"))
 except UsuarioNoEncontradoError as e:
-    print(
+    print_errors(e)
+
+titulo = Prompt.ask("[bold green]Digite el título del libro[/bold green]")
+try:
+    libro = biblioteca.buscar_libro(titulo)
+    print(Panel(f"El libro seleccionado es: {titulo}", border_style="green"))
+except LibroNoDisponibleError as e:
+    print_errors(e)
+
+resultado_final = Text()
+console_2 = Console()
+resultado = str(usuario.solicitar_libro(libro.titulo))
+resultado_final.append(resultado, style="bold blue")
+
+try:
+    resultado_prestar: str = str(libro.prestar())
+    resultado_final.append("\n")
+    resultado_final.append(resultado_prestar, style="bold blue")
+    console_2.print(
         Panel(
-            f"[bold red]Error:[/bold red] {e} \n [bold red]Tipo:[/bold red] {type(e)}",
-            border_style="red",
+            resultado_final,
+            title="[bold green]Préstamo[/bold green]",
+            border_style="green",
+            padding=(1, 2),  # 1 línea arriba/abajo, 2 espacios izq/der)
         )
     )
+except LibroNoDisponibleError as e:
+    print_errors(e)

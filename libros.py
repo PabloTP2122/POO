@@ -49,7 +49,7 @@ class Libro:
             f"veces_prestado={self.__veces_prestado})"
         )
 
-    def prestar(self):
+    def prestar(self) -> str:
         """Presta el libro si está disponible. Devuelve True si fue exitoso."""
         if not self.disponible:
             raise LibroNoDisponibleError(
@@ -58,7 +58,7 @@ class Libro:
 
         self.disponible = False
         self.__veces_prestado += 1
-        return True
+        return f"'{self.titulo}' prestado exitosamente. Total prestamos: {self.__veces_prestado}"
 
     def calcular_duracion(self):
         """Calcula la duración de un préstamo"""
