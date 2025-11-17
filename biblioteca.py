@@ -31,3 +31,9 @@ class Biblioteca:
         raise LibroNoDisponibleError(
             f"El libro con título '{titulo}', no está en la biblioteca o no existe"
         )
+
+    # Static method
+    # No recibe self, porque no necesita una instancia
+    @staticmethod
+    def validar_isbn(isbn: str):
+        return len(isbn) >= 10

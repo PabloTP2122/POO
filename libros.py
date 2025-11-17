@@ -69,6 +69,22 @@ class Libro(LibroBase):
             f"veces_prestado={self.__veces_prestado})"
         )
 
+    # Método que permite crear una variación del constructor de la clase
+    # Crea un método constructor
+    @classmethod
+    def crear_no_sisponible(
+        cls,
+        titulo: str,
+        autor: str,
+        ISBN: str,
+    ):
+        return cls(
+            titulo,
+            autor,
+            ISBN,
+            disponible=False,
+        )
+
     def prestar(self) -> str:
         """Presta el libro si está disponible. Devuelve True si fue exitoso."""
         if not self.disponible:

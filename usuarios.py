@@ -44,6 +44,10 @@ class Estudiante(Usuario):
         self.carrera = carrera
         self.limite_libros = 3
 
+    @classmethod
+    def estudiante_economia(cls, nombre: str, cedula: str):
+        return cls(nombre, cedula, carrera="Economía")
+
     def solicitar_libro(self, titulo: str) -> str:
         if not titulo:
             raise DatosLibroInvalidError(f"El título no debe estar vacío: {titulo}")

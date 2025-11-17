@@ -8,7 +8,25 @@ from biblioteca import Biblioteca
 from data import lista_estudiantes, lista_libros, usuarios_validos
 from exceptions import LibroNoDisponibleError, UsuarioNoEncontradoError
 from helper_functions import print_errors
+from libros import Libro
+from usuarios import Estudiante
 
+# Sin instancia para método estático
+# Utilidad relacionada a la biblioteca
+""" result = Biblioteca.validar_isbn("12345670")
+print(f"¿Es valido el ISBN? {result}") """
+
+# Libro no disponible con classmethod
+""" libro_no_disponible = Libro.crear_no_sisponible(
+    "Libro_no_disponible", "autor prueba", "1234567890"
+)
+print(f"El libro está disponible: {libro_no_disponible.disponible}") """
+
+# Estudiante de economía
+estudiante_economia = Estudiante.estudiante_economia("Juan", "A7549649")
+print(
+    f"La carrera del estuduante {estudiante_economia.nombre} es: {estudiante_economia.carrera}"
+)
 
 biblioteca = Biblioteca("Platzi biblioteca")
 biblioteca.usuarios = lista_estudiantes + usuarios_validos
