@@ -42,7 +42,8 @@ try:
     print(Panel(f"¡Bienvenido {usuario.nombre}!", border_style="blue"))
 except UsuarioNoEncontradoError as e:
     print_errors(e)
-
+# TODO: si el usuario no se encunetra, no debería de seguir el programa,
+# porque no va a poder prestar el libro
 titulo = Prompt.ask("[bold green]Digite el título del libro[/bold green]")
 try:
     libro = biblioteca.buscar_libro(titulo)
