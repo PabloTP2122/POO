@@ -1,5 +1,6 @@
 from typing import Protocol
 from exceptions import DatosLibroInvalidError
+from abc import ABC, abstractmethod
 
 
 class SolicitanteLibro(Protocol):
@@ -8,7 +9,22 @@ class SolicitanteLibro(Protocol):
     def solicitar_libro(self, titulo: str) -> str: ...
 
 
-class Usuario:
+class UsuarioBase(ABC):
+    """Métodos que debe tener cualquier clase que se gnenere desde UsuarioBase"""
+
+    @abstractmethod
+    def solicitar_libro(self, titulo):
+        pass
+
+    """ TypeError: Can't instantiate abstract class Estudiante without
+    an implementation for abstract method 'metodo_de_prueba' """
+
+    """ @abstractmethod
+    def metodo_de_prueba(self):
+        pass """
+
+
+class Usuario(UsuarioBase):
     def __init__(self, nombre: str, cedula: str):
         self.nombre = nombre
         self.cedula = cedula

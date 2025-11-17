@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Protocol
 from exceptions import LibroNoDisponibleError
 
@@ -18,7 +19,26 @@ class LibroProtocol(Protocol):
         ...
 
 
-class Libro:
+class LibroBase(ABC):
+    """Métodos que todo Libro debe tener"""
+
+    @abstractmethod
+    def prestar(self):
+        """Método para prestar libro"""
+        ...
+
+    @abstractmethod
+    def devolver(self):
+        """Método usado para devolver libro"""
+        ...
+
+    @abstractmethod
+    def calcular_duracion(self):
+        """Método para calcular la duración del prestamo"""
+        ...
+
+
+class Libro(LibroBase):
     """Clase para representar un libro de una biblioteca"""
 
     # Constante de clase
