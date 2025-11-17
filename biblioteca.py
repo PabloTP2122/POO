@@ -9,9 +9,10 @@ class Biblioteca:
         self.libros = []
         self.usuarios = []
 
+    @property
     def libros_disponibles(self) -> list:
         """Retorna el título del libro si está disponible"""
-        return [libro.titulo for libro in self.libros if libro.disponible]
+        return [libro for libro in self.libros if libro.disponible]
 
     def buscar_usuario(self, cedula):
         """Permite buscar entre los usuarios disponibles"""

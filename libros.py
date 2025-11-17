@@ -92,15 +92,24 @@ class Libro(LibroBase):
         self.disponible = True
         return True
 
+    @property
     def es_popular(self) -> bool:
         """Indica si el libro ha superado el umbral de popularidad."""
         return self.__veces_prestado >= self.UMBRAL_POPULARIDAD
 
-    def get_veces_prestado(self) -> int:
+    @property
+    def veces_prestado(self) -> int:
         return self.__veces_prestado
 
-    def set_veces_prestado(self, veces_prestado):
-        self.__veces_prestado = veces_prestado
+    @veces_prestado.setter
+    def veces_prestado(self, veces_prestado):
+        if veces_prestado > 0:
+            self.__veces_prestado = veces_prestado
+        raise ValueError("El vlaor de veces_prestado, debe ser mayor a cero")
+
+    @property
+    def descripcion_completa(self):
+        return f"{self.titulo} por {self.autor}, ISBN: {self.ISBN}"
 
 
 class LibroFísico(Libro):

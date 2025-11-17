@@ -14,6 +14,10 @@ biblioteca = Biblioteca("Platzi biblioteca")
 biblioteca.usuarios = lista_estudiantes + usuarios_validos
 biblioteca.libros = lista_libros
 
+# Ejemplo de setter con valor inválido.
+# libro_de_prueba = lista_libros[0]
+# libro_de_prueba.veces_prestado = -1
+
 
 console = Console()
 # 1. Construye el contenido como un objeto Text (o un simple string)
@@ -22,9 +26,9 @@ contenido.append("Bienvenido a la Biblioteca de Platzi\n", style="bold green")
 contenido.append("------------------------------------\n", style="dim green")
 contenido.append("Libros disponibles:\n", style="bold cyan")
 
-for libro in biblioteca.libros_disponibles():
+for libro in biblioteca.libros_disponibles:
     # Añadimos viñetas para un look más limpio
-    contenido.append(f"  • Título: {libro}\n", style="cyan")
+    contenido.append(f"  • Título: {libro.descripcion_completa}\n", style="cyan")
 
 # 2. Imprime UN SOLO Panel con ese contenido
 console.print(

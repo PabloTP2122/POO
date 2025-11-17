@@ -33,6 +33,10 @@ class Usuario(UsuarioBase):
     def solicitar_libro(self, titulo) -> str:
         return f"Solicitud del libro realizada {titulo}"
 
+    @property
+    def nombre_completo(self):
+        return f"{self.nombre}, con cedula: {self.cedula}"
+
 
 class Estudiante(Usuario):
     def __init__(self, nombre: str, cedula: str, carrera: str, limite_libros: int = 3):
