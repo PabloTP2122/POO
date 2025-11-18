@@ -1,0 +1,169 @@
+{
+    "nombre": "Platzi biblioteca",
+    "usuarios": [
+        {
+            "nombre": "Pablo",
+            "cedula": "A1630637",
+            "libros_prestados": [],
+            "carrera": "IMT",
+            "limite_libros": 3
+        },
+        {
+            "nombre": "Juan",
+            "cedula": "A1645637",
+            "libros_prestados": [],
+            "carrera": "IMT",
+            "limite_libros": 3
+        },
+        {
+            "nombre": "Maria",
+            "cedula": "A1656637",
+            "libros_prestados": [],
+            "carrera": "IMT",
+            "limite_libros": 3
+        },
+        {
+            "nombre": "Pedro",
+            "cedula": "A1667637",
+            "libros_prestados": [],
+            "carrera": "IMT",
+            "limite_libros": 3
+        },
+        {
+            "nombre": "Ana",
+            "cedula": "A1678637",
+            "libros_prestados": [],
+            "carrera": "IMT",
+            "limite_libros": 3
+        },
+        {
+            "nombre": "Luis",
+            "cedula": "A1689637",
+            "libros_prestados": [],
+            "carrera": "IMT",
+            "limite_libros": 3
+        },
+        {
+            "nombre": "Carlos",
+            "cedula": "A1690637",
+            "libros_prestados": [],
+            "carrera": "IMT",
+            "limite_libros": 3
+        },
+        {
+            "nombre": "Ana",
+            "cedula": "A1601637",
+            "libros_prestados": [],
+            "carrera": "IMT",
+            "limite_libros": 3
+        },
+        {
+            "nombre": "Luis",
+            "cedula": "A1612637",
+            "libros_prestados": [],
+            "carrera": "IMT",
+            "limite_libros": 3
+        },
+        {
+            "nombre": "Carlos",
+            "cedula": "A1623637",
+            "libros_prestados": [],
+            "carrera": "IMT",
+            "limite_libros": 3
+        },
+        {
+            "nombre": "Pablo TP (Profesor)",
+            "cedula": "L157820528",
+            "libros_prestados": [],
+            "departamento": "Ciencias e ingeniería",
+            "limite_libros": null
+        },
+        {
+            "nombre": "Juanito (Profesor)",
+            "cedula": "L147820528",
+            "libros_prestados": [],
+            "departamento": "Humanidades",
+            "limite_libros": null
+        },
+        {
+            "nombre": "Rocio (Profesor)",
+            "cedula": "L15741828",
+            "libros_prestados": [],
+            "departamento": "Ciencias e ingeniería",
+            "limite_libros": null
+        }
+    ],
+    "libros": [
+        {
+            "titulo": "100 años de soledad",
+            "autor": "Gabriel Garcia M",
+            "ISBN": "1234567890",
+            "disponible": true,
+            "_Libro__veces_prestado": 0
+        },
+        {
+            "titulo": "El fin de la eternidad",
+            "autor": "Isaac Asimov",
+            "ISBN": "1234567890",
+            "disponible": true,
+            "_Libro__veces_prestado": 0
+        },
+        {
+            "titulo": "Yo, robot",
+            "autor": "Isaac Asimov",
+            "ISBN": "1234567890",
+            "disponible": true,
+            "_Libro__veces_prestado": 0
+        },
+        {
+            "titulo": "El hombre bicentenario",
+            "autor": "Isaac Asimov",
+            "ISBN": "1234567890",
+            "disponible": true,
+            "_Libro__veces_prestado": 0
+        },
+        {
+            "titulo": "Fundación e imperio",
+            "autor": "Isaac Asimov",
+            "ISBN": "1234567890",
+            "disponible": true,
+            "_Libro__veces_prestado": 0
+        },
+        {
+            "titulo": "El juego de Ender",
+            "autor": "Orson Scott Card",
+            "ISBN": "1234567890",
+            "disponible": true,
+            "_Libro__veces_prestado": 0
+        },
+        {
+            "titulo": "El misterio de la pirámide",
+            "autor": "Arthur Conan Doyle",
+            "ISBN": "1234567890",
+            "disponible": true,
+            "_Libro__veces_prestado": 0
+        },
+        {
+            "titulo": "El alquimista",
+            "autor": "Paulo Coelho",
+            "ISBN": "1234567890",
+            "disponible": true,
+            "_Libro__veces_prestado": 0
+        },
+        {
+            "titulo": "El principito",
+            "autor": "Antoine de Saint-Exupéry",
+            "ISBN": "1234567890",
+            "disponible": true,
+            "_Libro__veces_prestado": 0
+        },
+        {
+            "titulo": "El arte de la guerra",
+            "autor": "Sun Tzu",
+            "ISBN": "1234567890",
+            "disponible": true,
+            "_Libro__veces_prestado": 0
+        }
+    ],
+    "fecha_guardado": "2025-11-17 18:15:09"
+}

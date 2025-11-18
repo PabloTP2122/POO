@@ -2,8 +2,8 @@ from exceptions import UsuarioNoEncontradoError, LibroNoDisponibleError
 
 
 class Biblioteca:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, nombre):
+        self.nombre = nombre
         # La composición se usa cuando un objeto está compuesto de otros objetos, o los "posee".
         # En este caso posee libros y usuarios
         self.libros = []
