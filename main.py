@@ -1,99 +1,139 @@
+import sys
 from rich import print
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.text import Text
 
-from biblioteca import Biblioteca
-from data import lista_estudiantes, lista_libros, usuarios_validos
-from exceptions import LibroNoDisponibleError, UsuarioNoEncontradoError
+# Asumo que estas importaciones funcionan en tu entorno local
+from exceptions import (
+    LibroNoDisponibleError,
+    LibroPrestadoError,
+    UsuarioNoEncontradoError,
+)
 from helper_functions import print_errors
 from persistencia import Persistencia
 
-""" from libros import Libro
-from usuarios import Estudiante """
 
-# Sin instancia para método estático
-# Utilidad relacionada a la biblioteca
-""" result = Biblioteca.validar_isbn("12345670")
-print(f"¿Es valido el ISBN? {result}") """
+def mostrar_bienvenida(biblioteca, console):
+    """Muestra la cabecera y los libros disponibles."""
+    contenido = Text()
+    contenido.append("Bienvenido a la Biblioteca de Platzi\n", style="bold green")
+    contenido.append("-" * 36 + "\n", style="dim green")
+    contenido.append("Libros disponibles:\n", style="bold cyan")
 
-# Libro no disponible con classmethod
-""" libro_no_disponible = Libro.crear_no_sisponible(
-    "Libro_no_disponible", "autor prueba", "1234567890"
-)
-print(f"El libro está disponible: {libro_no_disponible.disponible}") """
+    for libro in biblioteca.libros_disponibles:
+        contenido.append(f"  • Título: {libro.descripcion_completa}\n", style="cyan")
 
-# Estudiante de economía
-""" estudiante_economia = Estudiante.estudiante_economia("Juan", "A7549649")
-print(
-    f"La carrera del estuduante {estudiante_economia.nombre} es: {estudiante_economia.carrera}"
-) """
-
-biblioteca = Biblioteca("Platzi biblioteca")
-biblioteca.usuarios = lista_estudiantes + usuarios_validos
-biblioteca.libros = lista_libros
-
-persistencia = Persistencia()
-persistencia.guardar_datos(biblioteca)
-
-# Ejemplo de setter con valor inválido.
-# libro_de_prueba = lista_libros[0]
-# libro_de_prueba.veces_prestado = -1
-
-
-console = Console()
-# 1. Construye el contenido como un objeto Text (o un simple string)
-contenido = Text()
-contenido.append("Bienvenido a la Biblioteca de Platzi\n", style="bold green")
-contenido.append("------------------------------------\n", style="dim green")
-contenido.append("Libros disponibles:\n", style="bold cyan")
-
-for libro in biblioteca.libros_disponibles:
-    # Añadimos viñetas para un look más limpio
-    contenido.append(f"  • Título: {libro.descripcion_completa}\n", style="cyan")
-
-# 2. Imprime UN SOLO Panel con ese contenido
-console.print(
-    Panel(
-        contenido,
-        title="[bold green]Mi Biblioteca creada en Platzi[/bold green]",
-        border_style="green",
-        padding=(1, 2),  # 1 línea arriba/abajo, 2 espacios izq/der
-    )
-)
-
-cedula = Prompt.ask("[bold green]Digite el número de cédula[/bold green]")
-try:
-    usuario = biblioteca.buscar_usuario(cedula)
-    print(Panel(f"¡Bienvenido {usuario.nombre}!", border_style="blue"))
-except UsuarioNoEncontradoError as e:
-    print_errors(e)
-# TODO: si el usuario no se encunetra, no debería de seguir el programa,
-# porque no va a poder prestar el libro
-titulo = Prompt.ask("[bold green]Digite el título del libro[/bold green]")
-try:
-    libro = biblioteca.buscar_libro(titulo)
-    print(Panel(f"El libro seleccionado es: {titulo}", border_style="green"))
-except LibroNoDisponibleError as e:
-    print_errors(e)
-
-resultado_final = Text()
-console_2 = Console()
-resultado = str(usuario.solicitar_libro(libro.titulo))
-resultado_final.append(resultado, style="bold blue")
-
-try:
-    resultado_prestar: str = str(libro.prestar())
-    resultado_final.append("\n")
-    resultado_final.append(resultado_prestar, style="bold blue")
-    console_2.print(
+    console.print(
         Panel(
-            resultado_final,
-            title="[bold green]Préstamo[/bold green]",
+            contenido,
+            title="[bold green]Mi Biblioteca creada en Platzi[/bold green]",
             border_style="green",
-            padding=(1, 2),  # 1 línea arriba/abajo, 2 espacios izq/der)
+            padding=(1, 2),
         )
     )
-except LibroNoDisponibleError as e:
-    print_errors(e)
+
+
+def obtener_usuario(biblioteca):
+    """
+    Intenta obtener un usuario.
+    Retorna el objeto usuario o None si el usuario decide salir/falla muchas veces.
+    """
+    while True:
+        cedula = Prompt.ask(
+            "[bold green]Digite el número de cédula (o 'salir' para cancelar)[/bold green]"
+        )
+
+        if cedula.lower() == "salir":
+            return None
+
+        try:
+            usuario = biblioteca.buscar_usuario(cedula)
+            print(Panel(f"¡Bienvenido {usuario.nombre}!", border_style="blue"))
+            return usuario
+        except UsuarioNoEncontradoError as e:
+            print_errors(e)
+            print("[yellow]Intente nuevamente.[/yellow]")
+
+
+def obtener_libro(biblioteca):
+    """Intenta obtener un libro válido."""
+    while True:
+        titulo = Prompt.ask(
+            "[bold green]Digite el título del libro (o 'salir')[/bold green]"
+        )
+
+        if titulo.lower() == "salir":
+            return None
+
+        try:
+            libro = biblioteca.buscar_libro(titulo)
+            # Verificamos disponibilidad ANTES de retornar
+            if not libro.disponible:
+                raise LibroNoDisponibleError(f"El libro '{titulo}' no está disponible.")
+
+            print(
+                Panel(f"El libro seleccionado es: {libro.titulo}", border_style="green")
+            )
+            return libro
+        except (LibroNoDisponibleError, Exception) as e:
+            # Nota: Asumo que buscar_libro lanza error si no existe,
+            # o agregamos lógica para LibroNoEncontrado.
+            print_errors(e)
+
+
+def main():
+    persistencia = Persistencia()
+    biblioteca = persistencia.cargar_datos()
+    console = Console()
+
+    mostrar_bienvenida(biblioteca, console)
+
+    # 1. Paso Crítico: Obtener Usuario
+    # Resolvemos el TODO: Si no hay usuario, no avanzamos.
+    usuario = obtener_usuario(biblioteca)
+    if not usuario:
+        print("[bold red]Operación cancelada. Adiós.[/bold red]")
+        return  # Salimos de la función main, terminando el programa
+
+    # 2. Paso Crítico: Obtener Libro
+    libro = obtener_libro(biblioteca)
+    if not libro:
+        print("[bold red]Operación cancelada. Adiós.[/bold red]")
+        return
+
+    # 3. Realizar el Préstamo
+    # Aquí ya tenemos la certeza de que 'usuario' y 'libro' existen y son válidos.
+    try:
+        # Sugerencia POO: El método prestar debería ser atómico.
+        # O el usuario pide el libro, o el libro se presta a un usuario.
+        # Evita depender de strings para lógica de control.
+
+        resultado_prestamo = (
+            libro.prestar()
+        )  # Asumiendo que esto actualiza el estado interno
+
+        # Registramos que el usuario tiene el libro (si tu lógica lo requiere)
+        usuario.solicitar_libro(libro.titulo)
+
+        console.print(
+            Panel(
+                Text(f"Éxito: {resultado_prestamo}", style="bold blue"),
+                title="[bold green]Préstamo Finalizado[/bold green]",
+                border_style="green",
+                padding=(1, 2),
+            )
+        )
+
+        # Guardamos cambios solo si todo salió bien
+        persistencia.guardar_datos(biblioteca)
+
+    except (LibroPrestadoError, LibroNoDisponibleError) as e:
+        print_errors(e)
+    except Exception as e:
+        print(f"[bold red]Error inesperado: {e}[/bold red]")
+
+
+if __name__ == "__main__":
+    main()
