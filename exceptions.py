@@ -21,3 +21,7 @@ class LibroNoDisponibleError(BibliotecaError):
 
 class UsuarioNoEncontradoError(BibliotecaError):
     pass
+
+
+class LibroPrestadoError(BibliotecaError):
+    pass
