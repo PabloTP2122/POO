@@ -1,6 +1,7 @@
 from libros import LibroDigital, LibroProtocol, LibroFísico
 from usuarios import Estudiante, Profesor, SolicitanteLibro
 
+# TODO: la data debería guardarse desde aquí al json
 
 # Create 10 Libros físicos
 mi_libro = LibroFísico("100 años de soledad", "Gabriel Garcia M", "1234567890")
