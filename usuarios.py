@@ -1,5 +1,5 @@
 from typing import Protocol
-from exceptions import DatosLibroInvalidError
+from exceptions import DatosLibroInvalidError, LibroPrestadoError
 from abc import ABC, abstractmethod
 
 
@@ -15,13 +15,6 @@ class UsuarioBase(ABC):
     @abstractmethod
     def solicitar_libro(self, titulo):
         pass
-
-    """ TypeError: Can't instantiate abstract class Estudiante without
-    an implementation for abstract method 'metodo_de_prueba' """
-
-    """ @abstractmethod
-    def metodo_de_prueba(self):
-        pass """
 
 
 class Usuario(UsuarioBase):
@@ -49,12 +42,20 @@ class Estudiante(Usuario):
         return cls(nombre, cedula, carrera="Economía")
 
     def solicitar_libro(self, titulo: str) -> str:
+        if titulo in self.libros_prestados:
+            raise LibroPrestadoError(
+                f"El libro con título: {titulo}, ya fue prestado al usuario."
+            )
         if not titulo:
             raise DatosLibroInvalidError(f"El título no debe estar vacío: {titulo}")
         if len(self.libros_prestados) < self.limite_libros:
+            print(
+                f"libros_prestados: {len(self.libros_prestados)}\n Libros: {self.libros_prestados}"
+            )
             self.libros_prestados.append(titulo)
             return f"Libro con título: '{titulo}', correctamente prestado"
-        return f"Límite de préstamos alcanzado, límite: {self.limite_libros}"
+        else:
+            return f"Límite de préstamos alcanzado, límite: {self.limite_libros}"
 
 
 class Profesor(Usuario):
@@ -63,7 +64,12 @@ class Profesor(Usuario):
         self.departamento = departamento
         self.limite_libros = None
 
+    def solicitar_libro(self, titulo):
+        self.libros_prestados.append(titulo)
+        return f"Prestamo del libro: {titulo} autorizado"
 
-# Ejemplo que no implementa el método solicitar_libro
+
+# Ejemplo que no implementa el método solicitar_libro para explicar
+# la composición
 class Familia:
     def un_metodo(self): ...

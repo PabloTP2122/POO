@@ -28,9 +28,10 @@ class Biblioteca:
         for libro in self.libros:
             if libro.titulo == titulo and libro.disponible:
                 return libro
-        raise LibroNoDisponibleError(
-            f"El libro con título '{titulo}', no está en la biblioteca o no existe"
-        )
+        else:
+            raise LibroNoDisponibleError(
+                f"El libro con título '{titulo}', no está en la biblioteca o no existe"
+            )
 
     # Static method
     # No recibe self, porque no necesita una instancia

@@ -91,10 +91,10 @@ class Libro(LibroBase):
             raise LibroNoDisponibleError(
                 f"El libro solicitado: {self.titulo}, no está disponible"
             )
-
-        self.disponible = False
-        self.__veces_prestado += 1
-        return f"'{self.titulo}' prestado exitosamente. Total prestamos: {self.__veces_prestado}"
+        if self.disponible:
+            self.disponible = False
+            self.__veces_prestado += 1
+            return f"'{self.titulo}' prestado exitosamente. Total prestamos: {self.__veces_prestado}"
 
     def calcular_duracion(self):
         """Calcula la duración de un préstamo"""
