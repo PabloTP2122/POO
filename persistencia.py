@@ -52,6 +52,14 @@ class Persistencia:
                     cedula=dato_usuario["cedula"],
                     departamento=dato_usuario["departamento"],
                 )
+            # --- FIX CRÍTICO: REHIDRATACIÓN ---
+            if usuario:
+                # Recuperamos la lista del JSON. Si no existe, usa una lista vacía.
+                libros_guardados = dato_usuario.get("libros_prestados", [])
 
-            biblioteca.usuarios.append(usuario)
+                # Sobreescribimos la lista vacía que creó el __init__
+                usuario.libros_prestados = libros_guardados
+
+                biblioteca.usuarios.append(usuario)
+
         return biblioteca
